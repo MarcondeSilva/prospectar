@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prospecção | Lex Juris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos para a tag html e body para preencher a tela */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Estilos gerais para o contêiner e inputs */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1A1A1A; /* Fundo escuro principal */
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Centraliza o card vertical e horizontalmente */
+            min-height: 100vh; /* Permite que o body tenha a altura mínima de 100% da tela */
+            padding: 1.5rem; /* Espaçamento ao redor do card */
+            box-sizing: border-box; /* Garante que padding e borda não aumentem o tamanho total */
+            overflow-y: auto; /* Permite rolagem se o conteúdo for maior que a tela */
+            color: #AAAAAA; /* Cor padrão para textos menos importantes ou cinzas */
+        }
+
+        .screen-container {
+            background-color: #2C2C2C; /* Fundo do card mais claro que o body, mas ainda escuro */
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2); /* Sombra ajustada para fundo escuro */
+            padding: 3rem 2rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            /* Animação de entrada suave */
+            animation: fadeIn 0.5s ease-in-out;
+            /* Garante que o card ocupe o espaço necessário dentro do body */
+            height: fit-content;
+            margin: auto;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos compartilhados entre as telas */
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #FFD700; /* Ouro */
+            margin-bottom: 0.5rem;
+        }
+        .tagline {
+            font-size: 1rem;
+            color: #DAA520; /* Ouro um pouco mais suave */
+            margin-bottom: 2rem;
+        }
+        .message-container {
+            text-align: left; /* Alinhamento padrão à esquerda para os textos */
+            margin-bottom: 2.5rem;
+        }
+        .input-box, .form-select, .form-textarea {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid #555555; /* Borda mais escura para combinar */
+            background-color: #3C3C3C; /* Fundo dos inputs escuro */
+            color: #FFD700; /* Texto dos inputs em ouro */
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .input-box::placeholder, .form-textarea::placeholder {
+            color: #888888; /* Placeholder mais claro para contraste */
+        }
+        .input-box:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #FFD700; /* Borda ouro ao focar */
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3); /* Sombra ouro ao focar */
+        }
+        .main-button {
+            width: 100%;
+            background-color: #DAA520; /* Cor de ouro para o botão */
+            color: #1A1A1A; /* Texto do botão em cor escura */
+            font-weight: 700;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .main-button:hover {
+            background-color: #FFD700; /* Efeito hover mais claro para ouro */
+            transform: translateY(-2px);
+        }
+        .select-wrapper {
+            position: relative;
+        }
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #FFD700; /* Seta do select em ouro */
+        }
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #FFD700; /* Labels em ouro */
+            margin-bottom: 0.5rem;
+            display: block;
+            text-align: left;
+        }
+
+        /* Estilos de texto para os parágrafos e títulos dentro dos message-container */
+        .text-xl.font-semibold.text-gray-800 {
+            color: #FFD700 !important; /* Cor ouro forçada para esses títulos */
+        }
+        .text-gray-600.leading-relaxed {
+            color: #AAAAAA !important; /* Cinza claro para legibilidade no fundo escuro */
+        }
+        /* ===== ESTILO ESPECÍFICO PARA A TELA DE AGRADECIMENTO (PÁGINA 04) ===== */
+        #thankYouScreen .message-container {
+            margin-bottom: 3rem;
+        }
+        #thankYouScreen .message-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+        #thankYouScreen .message-text {
+            font-size: 1rem;
+            color: #AAAAAA;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        #thankYouScreen .message-text b {
+            color: #FFD700;
+        }
+        
+        #thankYouScreen .thank-you-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #FFD700;
+            margin-top: 2rem;
+            letter-spacing: -0.05em;
+            text-transform: none;
+        }
+
+        /* Alinhamento de texto para as telas de boas-vindas e contato */
+        #welcomeScreen .message-container p,
+        #situacaoScreen .message-container p,
+        #contatoScreen .message-container p {
+            text-align: center;
+        }
+
+        /* Estilos do Spinner */
+        .hidden-spinner {
+            /* IMPORTANTE: Garante que o spinner comece invisível.
+               'display: none !important;' pode ser necessário se houver conflito de estilos */
+            display: none !important; 
+        }
+
+        #loadingSpinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex; /* Usado quando o spinner é visível para centralizar */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .spinner {
+            border: 8px solid #3C3C3C;
+            border-top: 8px solid #FFD700;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="screen-container">
+
+        <div id="welcomeScreen">
+            <div class="mb-10">
+                <img src="logo.png" alt="Logo Lex Juris" width="160" height="160" class="mx-auto mb-4">
+                <div class="logo-text">LEX JURIS</div>
+                <div class="tagline">Assessoria Jurídica</div>
+            </div>
+            
+            <div class="message-container">
+                <p class="text-xl font-semibold text-gray-800 mb-2">Olá, tudo bem?</p>
+                <p class="text-gray-600 leading-relaxed">
+                    Somos a Lex Juris, assessoria jurídica e vamos te ajudar por aqui.
+                </p>
+            </div>
+
+            <form id="welcomeForm" class="space-y-6">
+                <div>
+                    <input type="text" id="nome" name="nome" placeholder="Digite seu nome aqui" class="input-box" required>
+                </div>
+                <div>
+                    <button type="submit" class="main-button">
+                        Avançar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="situacaoScreen" class="hidden">
+             <div class="mb-10">
+                <img src="logo.png" alt="Logo Lex Juris" width="160" height="160" class="mx-auto mb-4">
+                <div class="logo-text">LEX JURIS</div>
+                <div class="tagline">Assessoria Jurídica</div>
+            </div>
+            
+            <div class="message-container">
+                <p class="text-xl font-semibold text-gray-800 mb-2">Fale-nos um pouco para que possamos te ajudar.</p>
+                <p class="text-gray-600 leading-relaxed">
+                    Em que situação você precisa de ajuda jurídica?
+                </p>
+            </div>
+
+            <form id="situacaoForm" class="space-y-6">
+                <div class="select-wrapper">
+                    <select id="situacao" name="situacao" class="input-box form-select text-center" required>
+                        <option value="" disabled selected>Selecione uma opção</option>
+                        <option value="Aposentadoria por Invalidez">Aposentadoria por invalidez</option>
+                        <option value="Aposentadoria por Tempo de Serviço">Aposentadoria por tempo de serviço</option>
+                        <option value="Aposentadoria Especial PCD">Aposentadoria Especial PCD</option>
+                        <option value="Benefício Assistencial - LOAS">Benefício Assistencial - LOAS</option>
+                        <option value="Pensão por Invalidez">Pensão por Invalidez</option>
+                        <option value="Pensão por Morte">Pensão por Morte</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+
+                <div id="outrosInputContainer" class="hidden space-y-4">
+                    <p class="text-sm text-gray-600 text-left -mt-4">
+                        Por favor, descreva sua situação.
+                    </p>
+                    <textarea id="outrosInput" name="outrosInput" rows="4" placeholder="Descreva brevemente a sua situação jurídica." class="input-box text-left"></textarea>
+                </div>
+
+                <div>
+                    <button type="submit" class="main-button">
+                        Avançar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="contatoScreen" class="hidden">
+            <div class="mb-10">
+                <img src="logo.png" alt="Logo Lex Juris" width="160" height="160" class="mx-auto mb-4">
+
+                <div class="logo-text">LEX JURIS</div>
+                <div class="tagline">Assessoria Jurídica</div>
+            </div>
+
+            <div class="message-container">
+                <p class="text-xl font-semibold text-gray-700 mb-2">
+                    Para que possamos te ajudar e mantermos um contato,
+                </p>
+                <p class="text-gray-600 leading-relaxed">
+                    deixe-nos seu número de telefone, ou preferencialmente seu WhatsApp.
+                </p>
+            </div>
+
+            <form id="contatoForm" class="space-y-6">
+                <div>
+                    <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone ou WhatsApp aqui" class="input-box" required>
+                </div>
+                <div>
+                    <button type="submit" class="main-button">
+                        Avançar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="thankYouScreen" class="hidden">
+            <div class="mb-10">
+                <img src="logo.png" alt="Logo Lex Juris" width="160" height="160" class="mx-auto mb-4">
+                <div class="logo-text">LEX JURIS</div>
+                <div class="tagline">Assessoria Jurídica</div>
+            </div>
+            
+            <div class="message-container">
+                <h4 class="message-title">Sua solicitação foi enviada!</h4>
+                <p class="message-text">
+                    "A <b>Lex Juris</b> é uma empresa de consultoria jurídica dedicada a defender seus direitos e pronta para auxiliá-lo.
+
+O seu contato é muito importante. Em breve, um de nossos advogados falará com você."
+                </p>
+                    
+                <p class="thank-you-text">
+                    Obrigado!
+                </p>
+            </div>
+
+            <button id="restartBtn" class="main-button mt-6">
+                Voltar ao Início
+            </button>
+        </div>
+
+    </div>
+
+    <div id="loadingSpinner" class="hidden-spinner"> 
+        <div class="spinner"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos das telas
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const situacaoScreen = document.getElementById('situacaoScreen');
+            const contatoScreen = document.getElementById('contatoScreen');
+            const thankYouScreen = document.getElementById('thankYouScreen');
+            
+            // Referência ao elemento do spinner
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            // NENHUM CÓDIGO AQUI PARA ESCONDER O SPINNER.
+            // A classe 'hidden-spinner' no HTML e no CSS já deve ser suficiente.
+
+
+            // Formulários e Inputs
+            const welcomeForm = document.getElementById('welcomeForm');
+            const situacaoForm = document.getElementById('situacaoForm');
+            const contatoForm = document.getElementById('contatoForm');
+            
+            const nomeInputWelcome = document.getElementById('nome');
+            const situacaoSelect = document.getElementById('situacao');
+            const outrosInputContainer = document.getElementById('outrosInputContainer');
+            const outrosInput = document.getElementById('outrosInput');
+            const telefoneInputContato = document.getElementById('telefone');
+            const restartBtn = document.getElementById('restartBtn');
+
+            // --- VARIÁVEL PARA ARMAZENAR DADOS ENTRE AS TELAS ---
+            let userData = {
+                nome: '',
+                situacao: '',
+                detalheOutros: '',
+                telefone: ''
+            };
+
+            // --- FUNÇÕES AUXILIARES PARA MOSTRAR/ESCONDER SPINNER ---
+            function showSpinner() {
+                // Remove 'hidden-spinner' e potencialmente adiciona 'visible-spinner' se você a tiver
+                loadingSpinner.classList.remove('hidden-spinner');
+            }
+
+            function hideSpinner() {
+                // Adiciona 'hidden-spinner' para esconder o spinner
+                loadingSpinner.classList.add('hidden-spinner');
+            }
+
+            // --- FUNÇÃO PARA FORMATAR O TELEFONE COM MÁSCARA ---
+            const formatarTelefone = (event) => {
+                let input = event.target;
+                let value = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+                let formattedValue = '';
+
+                if (value.length > 0) {
+                    formattedValue = '(' + value.substring(0, 2);
+                }
+                if (value.length > 2) {
+                    if (value.length === 11) {
+                         formattedValue += ') ' + value.substring(2, 7);
+                         if (value.length > 7) {
+                             formattedValue += '-' + value.substring(7, 11);
+                         }
+                    } else {
+                         formattedValue += ') ' + value.substring(2, 6);
+                         if (value.length > 6) {
+                             formattedValue += '-' + value.substring(6, 10);
+                         }
+                    }
+                }
+                
+                input.value = formattedValue;
+            };
+
+            // Adiciona o listener para a máscara de telefone
+            telefoneInputContato.addEventListener('input', formatarTelefone);
+
+            // --- FUNÇÃO: CAPITALIZAR A PRIMEIRA LETRA DE CADA PALAVRA ---
+            const capitalize = (text) => {
+                if (!text) return '';
+                return text.toLowerCase().split(' ').map(word => {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                }).join(' ');
+            };
+
+            // Capitalização em tempo real do nome
+            nomeInputWelcome.addEventListener('input', function () {
+                const pos = nomeInputWelcome.selectionStart;
+                nomeInputWelcome.value = capitalize(nomeInputWelcome.value);
+                nomeInputWelcome.setSelectionRange(pos, pos);
+            });
+
+
+            // --- ETAPA 1: Lógica da TELA DE BOAS-VINDAS com VALIDAÇÃO e CAPITALIZAÇÃO ---
+            welcomeForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const nome = nomeInputWelcome.value.trim();
+                
+                if (nome.length < 2) {
+                    alert('Por favor, digite seu nome completo ou um nome com pelo menos 2 caracteres.');
+                    nomeInputWelcome.focus();
+                    return;
+                }
+                
+                userData.nome = capitalize(nome);
+                
+                welcomeScreen.classList.add('hidden');
+                situacaoScreen.classList.remove('hidden');
+                situacaoScreen.style.animation = 'fadeIn 0.5s ease-in-out';
+                document.body.style.alignItems = 'flex-start';
+            });
+
+            // --- ETAPA 2: Lógica da TELA DE SITUAÇÃO JURÍDICA ---
+            situacaoSelect.addEventListener('change', function() {
+                if (situacaoSelect.value === 'Outros') {
+                    outrosInputContainer.classList.remove('hidden');
+                    outrosInput.focus();
+                } else {
+                    outrosInputContainer.classList.add('hidden');
+                    outrosInput.value = '';
+                }
+            });
+            situacaoForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const situacaoSelecionada = situacaoSelect.value;
+                
+                if (situacaoSelecionada) {
+                    if (situacaoSelecionada === 'Outros' && outrosInput.value.trim() === '') {
+                        alert('Por favor, descreva a sua situação no campo de texto.');
+                        outrosInput.focus();
+                        return;
+                    }
+
+                    userData.situacao = situacaoSelecionada;
+                    userData.detalheOutros = (situacaoSelecionada === 'Outros' ? outrosInput.value.trim() : '');
+                    
+                    situacaoScreen.classList.add('hidden');
+                    contatoScreen.classList.remove('hidden');
+                    contatoScreen.style.animation = 'fadeIn 0.5s ease-in-out';
+
+                } else {
+                    alert('Por favor, selecione uma situação jurídica para continuar.');
+                }
+            });
+
+            // --- ETAPA 3: Lógica da TELA DE CONTATO com VALIDAÇÃO E ENVIO ---
+            contatoForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const telefone = telefoneInputContato.value.replace(/\D/g, '');
+                
+                if (telefone.length < 10 || telefone.length > 11) {
+                    alert('Por favor, digite um número de telefone ou WhatsApp válido, com o DDD (ex: 84988887777).');
+                    telefoneInputContato.focus();
+                    return;
+                }
+
+                userData.telefone = telefone;
+                
+                console.log("Dados do prospect para envio:", userData);
+
+                // IMPORTANTE: SUBSTITUA 'SUA_URL_DO_APPS_SCRIPT_AQUI' pela URL real do seu Web App.
+                // Esta URL é gerada quando você implanta o script no Google Apps Script.
+                const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvNGLznDUUN0H0t1F31YK3mH95dmNuPwFOdVFhyaLNtERMXRWdDYhgGLGn4vEilmJ3/exec'; 
+
+                showSpinner(); // MOSTRA O SPINNER ANTES DE INICIAR A REQUISIÇÃO
+
+                try {
+                    const response = await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'cors', 
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded', 
+                        },
+                        body: new URLSearchParams(userData).toString() 
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Erro na rede ou servidor: ${response.status} ${response.statusText} - ${errorText}`);
+                    }
+
+                    const result = await response.json(); 
+                    console.log('Resposta do Apps Script:', result);
+
+                    if (result.success) {
+                        console.log("Dados enviados com sucesso para a planilha!");
+                    } else {
+                        alert('Erro ao enviar dados: ' + result.message + '. Verifique o console para mais detalhes.');
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao conectar com o Apps Script:', error);
+                    alert('Ocorreu um erro ao enviar seus dados. Por favor, tente novamente. Detalhes no console.');
+                } finally {
+                    hideSpinner(); // SEMPRE ESCONDE O SPINNER, independentemente do sucesso ou erro
+                }
+                
+                contatoScreen.classList.add('hidden');
+                thankYouScreen.classList.remove('hidden');
+                thankYouScreen.style.animation = 'fadeIn 0.5s ease-in-out';
+            });
+
+            // --- ETAPA 4 (FINAL): Lógica da TELA DE AGRADECIMENTO ---
+            restartBtn.addEventListener('click', function() {
+                userData = { nome: '', situacao: '', detalheOutros: '', telefone: '' };
+                welcomeForm.reset();
+                situacaoForm.reset();
+                outrosInput.value = '';
+                outrosInputContainer.classList.add('hidden');
+                contatoForm.reset();
+                
+                thankYouScreen.classList.add('hidden');
+                welcomeScreen.classList.remove('hidden');
+                welcomeScreen.style.animation = 'fadeIn 0.5s ease-in-out';
+                document.body.style.alignItems = 'center';
+                console.log("Processo reiniciado.");
+            });
+        });
+    </script>
+
+</body>
+</html>
